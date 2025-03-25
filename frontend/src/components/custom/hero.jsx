@@ -1,6 +1,5 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "../../components/ui/button";
 import { Search, MapPin } from "lucide-react";
 import InputBox from "./inputBox";
 

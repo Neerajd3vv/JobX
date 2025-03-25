@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 export const InfiniteMovingCards = ({

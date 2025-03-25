@@ -1,16 +1,16 @@
-import Link from "next/link";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
 
-import Header from "@/components/custom/header";
-import Hero from "@/components/custom/hero";
-import FeaturedJobs from "@/components/custom/featuredJobs";
-import Steps from "@/components/custom/steps";
-import { Testimonials } from "@/components/custom/testimonials";
-import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
+import { Button } from "../components/ui/button";
+
+import Hero from "../components/custom/hero";
+import Steps from "../components/custom/steps";
+import { Testimonials } from "../components/custom/testimonials";
+import { AnimatedTooltip } from "../components/ui/animated-tooltip";
 import myself from "../../public/images/myself.jpg";
 import X from "../../public/images/X.jpg";
 import linkedin from "../../public/images/linkedin.png";
+import FeaturedJobs from "../components/custom/featuredJobs";
+import Header from "../components/custom/header";
+
 const people = [
   {
     id: 1,

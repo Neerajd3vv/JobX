@@ -7,11 +7,12 @@ import { X } from "lucide-react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 function Header() {
   const [scrolledEnough, setScrolledEnough] = useState(false);
   const [hamMenu, setHamMenu] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
-
+  const router = useRouter();
   useEffect(() => {
     window.addEventListener("scroll", () => {
       setScrolledEnough(window.scrollY > 8);
@@ -92,6 +93,9 @@ function Header() {
 
           <div className="hidden md:flex items-center gap-4 font-poppins">
             <Button
+            onClick={(e) => {
+              router.push("/signin");
+            }}
               variant="outline"
               size="lg"
               className="px-8 border-1 border-zinc-300 hover:bg-[#2e1c2b] hover:text-white hover:border-zinc-300 transform transition-all duration-300 ease-in text-xs lg:text-sm"
@@ -99,6 +103,9 @@ function Header() {
               Sign In
             </Button>
             <Button
+            onClick={(e) => {
+              router.push("/signup");
+            }}
               size="lg"
               className="bg-blue-700 text-xs lg:text-sm hover:bg-blue-700/90 transform transition-all duration-300 ease-in"
             >
@@ -159,12 +166,20 @@ function Header() {
 
               <div className="mt-auto flex flex-col gap-4 mb-8 font-poppins">
                 <Button
+                  onClick={() => {
+                    router.push("/signin");
+                  }}
                   variant="outline"
                   className="w-full border-zinc-300 hover:bg-[#2e1c2b] hover:text-white px-8 border-1 hover:border-zinc-300 transform transition-all duration-300 "
                 >
                   Sign In
                 </Button>
-                <Button className="w-full bg-blue-700 hover:bg-blue-700/90 transform transition-all duration-300 ease-in">
+                <Button
+                  onClick={(e) => {
+                    router.push("/signup");
+                  }}
+                  className="w-full bg-blue-700 hover:bg-blue-700/90 transform transition-all duration-300 ease-in"
+                >
                   Sign Up
                 </Button>
               </div>
