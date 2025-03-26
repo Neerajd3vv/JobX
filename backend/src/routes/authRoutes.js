@@ -1,13 +1,13 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import prisma from "../prismaClient.js";
-import { z } from "zod";
+import { date, z } from "zod";
 const router = express.Router();
 
 const signupSchema = z.object({
   name: z.string().min(2).max(100),
   email: z.string().email(),
-  password: z.string().min(6).max(15),
+  password: z.string().min(6).max(15).nullable().optional(),
 });
 
 const signinSchema = z.object({
@@ -15,8 +15,8 @@ const signinSchema = z.object({
   password: z.string().min(6).max(15),
 });
 
-router.post("/signup", async (req, res) => {
-  console.log(req.body);
+router.post("/signup/:provider", async (req, res) => {
+  const { provider } = req.params;
   const validatedData = signupSchema.safeParse(req.body);
 
   if (!validatedData.success) {
@@ -34,27 +34,49 @@ router.post("/signup", async (req, res) => {
 
   try {
     // checks if user already exists
-    const userExists = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
+    if (provider === "credentials") {
+      const userExists = await prisma.user.findUnique({
+        where: {
+          email,
+          provider,
+        },
+      });
+      if (userExists) {
+        return res.status(400).json({ message: "User already exists" });
+      }
 
-    if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
+      // need to hash the password here cant store password in plain text
+      const hashedPassword = password ? bcrypt.hashSync(password, 10) : null;
+      await prisma.user.create({
+        data: {
+          name,
+          email,
+          password: hashedPassword,
+          provider,
+        },
+      });
+      return res.status(201).json({ message: "User created successfully" });
+    } else if (provider === "google") {
+      const userExists = await prisma.user.findUnique({
+        where: {
+          email,
+          provider,
+        },
+      });
+      if (userExists) {
+        return res.status(400).json({ message: "User already exists" });
+      }
+      // need to hash the password here cant store password in plain text
+      await prisma.user.create({
+        data: {
+          name,
+          email,
+          password,
+          provider,
+        },
+      });
+      return res.status(201).json({ message: "User created successfully" });
     }
-
-    // need to hash the password here cant store password in plain text
-    const hashedPassword = bcrypt.hashSync(password, 10);
-    const newuser = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-      },
-    });
-    console.log(newuser);
-    return res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     return res
       .status(500)
@@ -80,9 +102,9 @@ router.post("/signin", async (req, res) => {
     const foundUser = await prisma.user.findUnique({
       where: {
         email,
-      },
+        provider: "credentials",
+      }, 
     });
-    console.log(foundUser);
     if (!foundUser) {
       return res
         .status(404)
@@ -92,9 +114,7 @@ router.post("/signin", async (req, res) => {
     if (!comparePass) {
       return res.status(400).json({ message: "Password is incorrect" });
     }
-    return res
-      .status(200)
-      .json({ message: "User logged in successfully", data: foundUser });
+    return res.status(200).json({ message: "User logged in successfully" , userData : foundUser});
   } catch (error) {
     return res
       .status(500)

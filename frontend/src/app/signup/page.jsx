@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import InputBox from "../../components/custom/inputBox";
 import googleLogo from "../../../public/images/Google__G__logo.svg.webp";
 import Image from "next/image";
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -14,17 +15,80 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Separator } from "../../components/ui/separator";
-
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 export default function SignUp() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubmit = async () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!email || !password || !name) {
+      toast("Please fill all the fields");
+      return;
+    } else if (password.length < 6) {
+      toast("Password should be atleast 6 characters long");
+      return;
+    } else if (name.length < 2) {
+      toast("Name should be atleast 2 characters long");
+      return;
+    }
     setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 1500); // Simulate API call
+
+    try {
+      console.log("Backend URL:", process.env.NEXT_PUBLIC_BACKEND_URL);
+
+      const response = await fetch(
+        `http://localhost:8383/v1/auth/signup/credentials`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            password: password,
+          }),
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setIsLoading(false);
+        toast("Sign In to continue");
+        router.push("/signin");
+      } else if (data.message === "Validation Failed!") {
+        toast("Pls give all info. pass min - 6 & name min - 2");
+      } else if (data.message === "User already exists") {
+        toast("User already exists");
+      }
+    } catch (error) {
+      console.log("error", error);
+      toast("Something went wrong");
+    } finally {
+      setIsLoading(false);
+      setName("");
+      setEmail("");
+      setPassword("");
+    }
+  };
+
+  const handleGoogleSignUp = async () => {
+    setIsLoading(true);
+    try {
+      await signIn("google", {
+        callbackUrl: "/test",
+      });
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -50,6 +114,8 @@ export default function SignUp() {
                 Name
               </Label>
               <InputBox
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 id="name"
                 type="text"
                 className="w-full p-4 border-1 border-zinc-300 rounded-lg"
@@ -63,6 +129,8 @@ export default function SignUp() {
                 Email
               </Label>
               <InputBox
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 id="email"
                 type="email"
                 className="w-full p-4 border-1 border-zinc-300 rounded-lg"
@@ -76,6 +144,8 @@ export default function SignUp() {
                 Password
               </Label>
               <InputBox
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 id="password"
                 type="password"
                 className="w-full p-4 border-1 border-zinc-300 rounded-lg"
@@ -110,11 +180,16 @@ export default function SignUp() {
           </div>
 
           <Button
+            onClick={handleGoogleSignUp}
             variant="outline"
+            disabled={isLoading}
             className="w-full py-8 font-poppins text-lg border border-zinc-300 rounded-lg"
-            onClick={() => setIsLoading(true)}
           >
-            <Image src={googleLogo} alt="Google Logo" className="w-8 h-8 mr-2" />
+            <Image
+              src={googleLogo}
+              alt="Google Logo"
+              className="w-8 h-8 mr-2"
+            />
             Sign up with Google
           </Button>
         </CardContent>

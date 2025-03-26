@@ -20,5 +20,6 @@ model User {
   password String?
   role String @default("employee")
   profileCompleted Boolean @default(false)
+  provider String @default("credentials")
   createdAt DateTime @default(now())
 }

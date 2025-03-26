@@ -2,7 +2,7 @@ import express from "express";
 import prisma from "../prismaClient.js";
 const router = express.Router();
 
-router.get("/userInfo", async (req, res) => {
+router.post("/userInfo", async (req, res) => {
     console.log("entered here")
 
   const { email } = req.body;
@@ -13,6 +13,7 @@ router.get("/userInfo", async (req, res) => {
         email,
       },
     });
+    console.log("userExists", userExists)
     if (!userExists) {
       return res
         .status(400)
