@@ -1,7 +1,7 @@
 import React from "react";
-import { Button } from "../../components/ui/button";
+import { Button } from "../ui/button";
 import { Search, MapPin } from "lucide-react";
-import InputBox from "./inputBox";
+import InputBox from "./InputBox";
 
 export default function Hero() {
   return (

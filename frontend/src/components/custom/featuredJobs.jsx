@@ -1,6 +1,6 @@
 import React from "react";
 import { Building2 , ChevronRight , ArrowRight} from "lucide-react";
-import { Button } from "../../components/ui/button";
+import { Button } from "../ui/button";
 
 function FeaturedJobs() {
   return (

@@ -1,14 +1,14 @@
 
 import { Button } from "../components/ui/button";
 
-import Hero from "../components/custom/hero";
+import Hero from "../components/custom/Hero";
 import Steps from "../components/custom/steps";
-import { Testimonials } from "../components/custom/testimonials";
+import { Testimonials } from "../components/custom/Testimonials";
 import { AnimatedTooltip } from "../components/ui/animated-tooltip";
 import myself from "../../public/images/myself.jpg";
 import X from "../../public/images/X.jpg";
 import linkedin from "../../public/images/linkedin.png";
-import FeaturedJobs from "../components/custom/featuredJobs";
+import FeaturedJobs from "../components/custom/FeaturedJobs";
 import Header from "../components/custom/header";
 
 const people = [

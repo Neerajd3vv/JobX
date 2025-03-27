@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "../../components/ui/button";
 import { Loader2 } from "lucide-react";
-import InputBox from "../../components/custom/inputBox";
+import InputBox from "../../components/custom/InputBox";
 import googleLogo from "../../../public/images/Google__G__logo.svg.webp";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -82,7 +82,7 @@ export default function SignUp() {
     setIsLoading(true);
     try {
       await signIn("google", {
-        callbackUrl: "/test",
+        callbackUrl: "/profile",
       });
     } catch (error) {
       console.log("error", error);

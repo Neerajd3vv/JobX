@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../../components/ui/button";
 import { Loader2 } from "lucide-react";
-import InputBox from "../../components/custom/inputBox";
+import InputBox from "../../components/custom/InputBox";
 import googleLogo from "../../../public/images/Google__G__logo.svg.webp";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import {
   Card,
   CardContent,
@@ -21,6 +22,7 @@ import { Separator } from "../../components/ui/separator";
 import { toast } from "sonner";
 
 export default function SignIn() {
+  const { data: session, status } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,13 +41,12 @@ export default function SignIn() {
         email,
         password,
         redirect: false,
-        callbackUrl: "/test",
       });
 
       if (result.ok) {
-        router.push("/test");
-      }
-      if (result?.error) {
+        console.log("login in successfull");
+        // router.push("/profile")
+      } else if (result?.error) {
         if (result.error === "Password is incorrect") {
           toast("Password is incorrect");
         } else if (result.error === "User not found with such email") {
@@ -63,7 +64,7 @@ export default function SignIn() {
     setIsLoading(true);
     try {
       await signIn("google", {
-        callbackUrl: "/test",
+        redirect: false,
       });
     } catch (error) {
       toast("Something went wrong");
@@ -71,6 +72,17 @@ export default function SignIn() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (status === "loading") return;
+    if (session?.user) {
+      if (session.user.role === "employee") {
+        router.push("/profileCompletion/basicinfo");
+      } else {
+        router.push("/profileEmployer");
+      }
+    }
+  },[session]);
 
   return (
     <div className=" h-screen flex flex-col gap-10 items-center justify-center ">

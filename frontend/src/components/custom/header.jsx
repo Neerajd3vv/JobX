@@ -166,11 +166,12 @@ function Header() {
 
               <div className="mt-auto flex flex-col gap-4 mb-8 font-poppins">
                 <Button
+                  
                   onClick={() => {
                     router.push("/signin");
                   }}
                   variant="outline"
-                  className="w-full border-zinc-300 hover:bg-[#2e1c2b] hover:text-white px-8 border-1 hover:border-zinc-300 transform transition-all duration-300 "
+                  className="w-full py-6 border-zinc-300 hover:bg-[#2e1c2b] hover:text-white px-8 border-1 hover:border-zinc-300 transform transition-all duration-300 "
                 >
                   Sign In
                 </Button>
@@ -178,9 +179,9 @@ function Header() {
                   onClick={(e) => {
                     router.push("/signup");
                   }}
-                  className="w-full bg-blue-700 hover:bg-blue-700/90 transform transition-all duration-300 ease-in"
+                  className="w-full py-6 bg-blue-700 hover:bg-blue-700/90 transform transition-all duration-300 ease-in"
                 >
-                  Sign Up
+                  Get Started
                 </Button>
               </div>
             </div>
