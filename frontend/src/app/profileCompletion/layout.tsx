@@ -31,7 +31,7 @@ function NavigationButton({ currentStep }) {
   const index = forms.indexOf(currentStep);
 
   return (
-    <div className="w-full max-w-2xl  mx-auto ">
+    <div className="w-full max-w-2xl  mx-auto my-10">
       <div className="flex justify-between font-montserrat">
       {index > 0 && (
         <Button
