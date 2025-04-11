@@ -25,6 +25,7 @@ export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -59,7 +60,6 @@ export default function SignUp() {
       );
       const data = await response.json();
       if (response.ok) {
-        setIsLoading(false);
         toast("Sign In to continue");
         router.push("/signin");
       } else if (data.message === "Validation Failed!") {
@@ -85,6 +85,7 @@ export default function SignUp() {
         callbackUrl: "/profile",
       });
     } catch (error) {
+      toast("Server Error");
       console.log("error", error);
     } finally {
       setIsLoading(false);
@@ -118,7 +119,7 @@ export default function SignUp() {
                 onChange={(e) => setName(e.target.value)}
                 id="name"
                 type="text"
-                className="w-full p-4 border-1 border-zinc-300 rounded-lg"
+                className="w-full p-3 border-1 border-zinc-300 rounded-lg"
                 placeholder="John Doe"
                 required
               />
@@ -133,7 +134,7 @@ export default function SignUp() {
                 onChange={(e) => setEmail(e.target.value)}
                 id="email"
                 type="email"
-                className="w-full p-4 border-1 border-zinc-300 rounded-lg"
+                className="w-full p-3 border-1 border-zinc-300 rounded-lg"
                 placeholder="example@gmail.com"
                 required
               />
@@ -148,14 +149,14 @@ export default function SignUp() {
                 onChange={(e) => setPassword(e.target.value)}
                 id="password"
                 type="password"
-                className="w-full p-4 border-1 border-zinc-300 rounded-lg"
+                className="w-full p-3 border-1 border-zinc-300 rounded-lg"
                 required
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full font-poppins bg-blue-700 hover:bg-blue-700/90 transform transition-all duration-300 ease-in text-lg rounded-lg py-8"
+              className="w-full font-poppins bg-blue-700 hover:bg-blue-700/90 transform transition-all duration-300 ease-in text-lg rounded-lg py-7"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -183,7 +184,7 @@ export default function SignUp() {
             onClick={handleGoogleSignUp}
             variant="outline"
             disabled={isLoading}
-            className="w-full py-8 font-poppins text-lg border border-zinc-300 rounded-lg"
+            className="w-full py-7 font-poppins text-lg border border-zinc-300 rounded-lg"
           >
             <Image
               src={googleLogo}

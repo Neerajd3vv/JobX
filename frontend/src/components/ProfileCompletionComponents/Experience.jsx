@@ -15,7 +15,8 @@ export default function Experience() {
   const { profileData, setProfileData } = useEmployeeContext();
 
   const generateId = () => Date.now().toString(36) + Math.random().toString(36);
-console.log("profileDataContext" , profileData)
+  console.log("profileDataContext", profileData);
+
   // const [experiencelist, setExperienceList] = useState([
   //   {
   //     id: generateId(),
@@ -62,27 +63,28 @@ console.log("profileDataContext" , profileData)
         (exp) => exp.id !== uniqueId
       );
       const newProfileData = { ...prev, experience: newExperience };
-      return newProfileData
+      return newProfileData;
     });
   };
 
-  function handleChange(id, key, value) {
+  const handleChange = (id, key, value) => {
     setProfileData((prev) => {
-      const updatedExperience = prev.experience.map((exp) =>
-        exp.id === id ? { ...exp, [key]: value } : exp
-      );
-      const newExperience = { ...prev, experience: updatedExperience };
-
+      const updatedExp = prev.experience.map((experience) => {
+        return experience.id === id
+          ? { ...experience, [key]: value }
+          : experience;
+      });
+      const newExperience = { ...prev, experience: updatedExp };
       return newExperience;
     });
-  }
+  };
 
   return (
-    <div className=" flex flex-col mt-24  ">
+    <div className="  mt-24  ">
       <div className="w-full max-w-2xl mx-auto pb-10 space-y-6   ">
         <div className=" mb-10">
           <h2 className="text-4xl font-bold font-montserrat">
-            Add previous work experience
+            Add work experience
           </h2>
         </div>
         <div className="font-poppins flex flex-col space-y-2">
@@ -143,7 +145,7 @@ console.log("profileDataContext" , profileData)
                       type="text"
                       id={`job-title-${index}`}
                       placeholder="Enter job title"
-                      className="w-full p-4 border-1 border-zinc-300 rounded-lg"
+                      className="w-full p-3 border-1 border-zinc-300 rounded-lg"
                     />
                   </div>
 
@@ -167,7 +169,7 @@ console.log("profileDataContext" , profileData)
                       type="text"
                       id={`company-name-${index}`}
                       placeholder="Enter company name"
-                      className="w-full p-4 border-1 border-zinc-300 rounded-lg"
+                      className="w-full p-3 border-1 border-zinc-300 rounded-lg"
                     />
                   </div>
 
@@ -207,11 +209,11 @@ console.log("profileDataContext" , profileData)
                         type="text"
                         id={`country-${index}`}
                         placeholder="Enter country"
-                        className="w-full p-4 border border-zinc-300 rounded-lg"
+                        className="w-full p-3 border border-zinc-300 rounded-lg"
                         onBlur={() => setIsEditing(false)} // Hide input when focus is lost
                       />
                     ) : (
-                      <div className="w-full p-4 border border-zinc-300 rounded-lg bg-gray-100">
+                      <div className="w-full p-3 border border-zinc-300 rounded-lg bg-gray-100">
                         {country}
                       </div>
                     )}
@@ -230,7 +232,7 @@ console.log("profileDataContext" , profileData)
                         type="text"
                         id={`state-${index}`}
                         placeholder="State"
-                        className="w-full p-4 border border-zinc-300 rounded-lg"
+                        className="w-full p-3 border border-zinc-300 rounded-lg"
                       />
                     </div>
                     <div className="space-y-2">
@@ -245,7 +247,7 @@ console.log("profileDataContext" , profileData)
                         type="text"
                         id={`city-${index}`}
                         placeholder="City"
-                        className="w-full p-4 border border-zinc-300 rounded-lg"
+                        className="w-full p-3 border border-zinc-300 rounded-lg"
                       />
                     </div>
                   </div>
@@ -274,11 +276,7 @@ console.log("profileDataContext" , profileData)
                     checked={currentExp.currently_working}
                     onCheckedChange={(checked) => {
                       setCurrentlyWorking(!currentlyWorking);
-                      handleChange(
-                        currentExp.id,
-                        "currently_working",
-                        checked
-                      );
+                      handleChange(currentExp.id, "currently_working", checked);
                     }}
                   />
                   <Label
@@ -306,7 +304,7 @@ console.log("profileDataContext" , profileData)
                       size="lg"
                       className="py-4"
                     >
-                      Remove Experience
+                      Remove
                     </Button>
                   )}
                 </div>

@@ -16,25 +16,21 @@ export const authConfig = {
       async authorize(credentials) {
         console.log("credentials", credentials);
         const { email, password } = credentials;
-        const result = await fetch(
-          `http://localhost:8383/v1/auth/signin`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email,
-              password,
-            })
-          }
-        );
+        const result = await fetch(`http://localhost:8383/v1/auth/signin`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        });
         console.log("result", result);
         const data = await result.json();
         console.log("data", data);
         if (!result.ok) {
           throw new Error(data.message);
-          
         }
         return {
           id: data.userData.id,

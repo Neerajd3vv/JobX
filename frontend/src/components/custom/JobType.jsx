@@ -31,7 +31,7 @@ function JobType({ id }) {
           onClick={() => {
             handleClick(type);
           }}
-          className={`cursor-pointer px-3 py-2 rounded-lg  text-sm  font-medium transition-all 
+          className={`cursor-pointer px-3 py-1 rounded-lg  text-sm  font-medium transition-all 
             ${
               selected === type
                 ? "bg-blue-600 text-white  border-2"

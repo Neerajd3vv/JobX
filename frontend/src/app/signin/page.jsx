@@ -67,6 +67,7 @@ export default function SignIn() {
         redirect: false,
       });
     } catch (error) {
+      toast("Server Error");
       toast("Something went wrong");
     } finally {
       setIsLoading(false);
@@ -112,7 +113,7 @@ export default function SignIn() {
                 }}
                 id="email"
                 type="email"
-                className="w-full p-4 border-1 border-zinc-300 rounded-lg"
+                className="w-full p-3 border-1 border-zinc-300 rounded-lg"
                 placeholder="neerajwdev@google.com"
                 required
               />
@@ -136,13 +137,13 @@ export default function SignIn() {
                 }}
                 id="password"
                 type="password"
-                className="w-full p-4 border-1 border-zinc-300 rounded-lg"
+                className="w-full p-3 border-1 border-zinc-300 rounded-lg"
                 required
               />
             </div>
             <Button
               type="submit"
-              className="w-full font-poppins bg-blue-700 hover:bg-blue-700/90 transform transition-all duration-300 ease-in text-lg rounded-lg py-8"
+              className="w-full font-poppins bg-blue-700 hover:bg-blue-700/90 transform transition-all duration-300 ease-in text-lg rounded-lg py-7"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -169,7 +170,7 @@ export default function SignIn() {
           <Button
             disabled={isLoading}
             variant="outline"
-            className="w-full py-8 font-poppins text-lg border border-zinc-300 rounded-lg "
+            className="w-full py-7 font-poppins text-lg border border-zinc-300 rounded-lg "
             onClick={handleGoogleSignIn}
           >
             <Image

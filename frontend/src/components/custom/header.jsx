@@ -103,7 +103,7 @@ function Header() {
               Sign In
             </Button>
             <Button
-            onClick={(e) => {
+            onClick={() => {
               router.push("/signup");
             }}
               size="lg"
