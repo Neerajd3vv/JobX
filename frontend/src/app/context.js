@@ -41,7 +41,13 @@ export function EmployeeProfileProvider({ children }) {
           pincode: "",
         },
         skills: [],
-        socials: [],
+        socials: [
+          {
+            id: Date.now().toString(36) + Math.random().toString(36),
+            platform: "",
+            link: "",
+          },
+        ],
         resume: "",
       });
     }

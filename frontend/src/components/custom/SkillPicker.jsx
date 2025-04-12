@@ -82,8 +82,8 @@ function SkillPicker() {
   };
 
   return (
-    <div className="border p-4 max-h-[400px] overflow-y-auto rounded-lg border-zinc-200  space-y-4 mt-5">
-      <p className="text-gray-00">Want to add any of skills from below ? </p>
+    <div className="border font-poppins p-4 max-h-[400px] overflow-y-auto rounded-lg border-zinc-200  space-y-4 mt-5">
+      <p className="text-gray-700">Want to add any of skills from below ? </p>
       <ul className="space-y-2">
         {skills.map((skill, index) => (
           <li key={index}>

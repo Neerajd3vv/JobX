@@ -87,8 +87,8 @@ export default function Experience() {
             Add work experience
           </h2>
         </div>
-        <div className="font-poppins flex flex-col space-y-2">
-          <h3>Do you have previous work experience?*</h3>
+        <div className="font-poppins flex flex-col space-y-2">  
+          <p>Do you have previous work experience?*</p>
           <div className="flex space-x-3">
             <InputBox
               onChange={(e) => {

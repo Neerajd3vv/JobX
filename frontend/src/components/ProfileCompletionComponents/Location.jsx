@@ -7,7 +7,9 @@ function Location() {
   const [isEditing, setIsEditing] = useState(false);
   return (
     <div className="mt-24 w-full max-w-2xl  mx-auto">
-        <h2 className="text-4xl font-bold mb-10 font-montserrat">Add your address</h2>
+      <h2 className="text-4xl font-bold mb-10 font-montserrat">
+        Add your address
+      </h2>
 
       <div className="gap-4 font-poppins space-y-6">
         <div className="space-y-2 relative">
@@ -58,38 +60,9 @@ function Location() {
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label className="text-md" htmlFor={`state`}>
-            State
-          </Label>
-          <InputBox
-            onChange={(e) => {
-              handleChange(currentExp.id, "state", e.target.value);
-            }}
-            type="text"
-            id={`state`}
-            placeholder="state"
-            className="w-full p-3 border border-zinc-300 rounded-lg"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label className="text-md" htmlFor={`state`}>
-            City
-          </Label>
-          <InputBox
-            onChange={(e) => {
-              handleChange(currentExp.id, "state", e.target.value);
-            }}
-            type="text"
-            id={`state`}
-            placeholder="city"
-            className="w-full p-3 border border-zinc-300 rounded-lg"
-          />
-        </div>
-        </div>
           <div className="space-y-2">
             <Label className="text-md" htmlFor={`state`}>
-              Pincode
+              State
             </Label>
             <InputBox
               onChange={(e) => {
@@ -97,10 +70,39 @@ function Location() {
               }}
               type="text"
               id={`state`}
-              placeholder="pincode"
+              placeholder="state"
               className="w-full p-3 border border-zinc-300 rounded-lg"
             />
           </div>
+          <div className="space-y-2">
+            <Label className="text-md" htmlFor={`state`}>
+              City
+            </Label>
+            <InputBox
+              onChange={(e) => {
+                handleChange(currentExp.id, "state", e.target.value);
+              }}
+              type="text"
+              id={`state`}
+              placeholder="city"
+              className="w-full p-3 border border-zinc-300 rounded-lg"
+            />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label className="text-md" htmlFor={`state`}>
+            Pincode
+          </Label>
+          <InputBox
+            onChange={(e) => {
+              handleChange(currentExp.id, "state", e.target.value);
+            }}
+            type="text"
+            id={`state`}
+            placeholder="pincode"
+            className="w-full p-3 border border-zinc-300 rounded-lg"
+          />
+        </div>
       </div>
     </div>
   );
