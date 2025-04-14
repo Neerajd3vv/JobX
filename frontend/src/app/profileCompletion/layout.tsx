@@ -6,8 +6,7 @@ import { useParams } from "next/navigation";
  function Layout({ children }) {
   const {step} = useParams()
   return (
-    <div>
-      <HeaderTwo />
+    <div className="px-4 md:px-8">
       {children}
       <NavigationButton currentStep={step} />
     </div>

@@ -7,6 +7,7 @@ import { useEmployeeContext } from "../../app/context";
 import { X } from "lucide-react";
 import SkillPicker from "../custom/SkillPicker";
 
+
 function Skills() {
   const { profileData, setProfileData } = useEmployeeContext();
   const [skill, setSkill] = useState("");
@@ -40,7 +41,7 @@ function Skills() {
   return (
     <div className="mt-24 w-full max-w-2xl  mx-auto">
       <div>
-        <h2 className="text-4xl font-bold mb-10 font-montserrat">Add skills</h2>
+        <h2 className="text-4xl font-bold mb-6 font-montserrat">Add skills</h2>
 
         <div className="flex flex-wrap gap-3 py-5 font-poppins">
           {profileData?.skills.map((skill) => (

@@ -3,15 +3,25 @@ import { useState } from "react";
 import InputBox from "../custom/InputBox";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
+import { useEmployeeContext } from "../../app/context";
+
 function Location() {
   const [isEditing, setIsEditing] = useState(false);
+  const { profileData, setProfileData } = useEmployeeContext();
+
+  const handleChange = (label, value) => {
+    setProfileData((prev) => {
+      return { ...prev, address: { ...prev.address, [label]: value } };
+    });
+  };
+
   return (
     <div className="mt-24 w-full max-w-2xl  mx-auto">
-      <h2 className="text-4xl font-bold mb-10 font-montserrat">
+      <h2 className="text-4xl font-bold mb-6 font-montserrat">
         Add your address
       </h2>
 
-      <div className="gap-4 font-poppins space-y-6">
+      <form className="gap-4 font-poppins space-y-6">
         <div className="space-y-2 relative">
           <div className="flex justify-between items-center">
             <Label htmlFor={`country`} className="text-md">
@@ -46,15 +56,16 @@ function Location() {
           )}
         </div>
         <div className="space-y-2">
-          <Label className="text-md" htmlFor={`state`}>
+          <Label className="text-md" htmlFor={`street_address`}>
             Street address
           </Label>
           <InputBox
+            value={profileData?.address?.street_address || ""}
             onChange={(e) => {
-              handleChange(currentExp.id, "state", e.target.value);
+              handleChange("street_address", e.target.value);
             }}
             type="text"
-            id={`state`}
+            id={`street_address`}
             placeholder="street address"
             className="w-full p-3 border border-zinc-300 rounded-lg"
           />
@@ -65,8 +76,9 @@ function Location() {
               State
             </Label>
             <InputBox
+              value={profileData?.address?.state || ""}
               onChange={(e) => {
-                handleChange(currentExp.id, "state", e.target.value);
+                handleChange("state", e.target.value);
               }}
               type="text"
               id={`state`}
@@ -75,35 +87,37 @@ function Location() {
             />
           </div>
           <div className="space-y-2">
-            <Label className="text-md" htmlFor={`state`}>
+            <Label className="text-md" htmlFor={`city`}>
               City
             </Label>
             <InputBox
+              value={profileData?.address?.city || ""}
               onChange={(e) => {
-                handleChange(currentExp.id, "state", e.target.value);
+                handleChange("city", e.target.value);
               }}
               type="text"
-              id={`state`}
+              id={`city`}
               placeholder="city"
               className="w-full p-3 border border-zinc-300 rounded-lg"
             />
           </div>
         </div>
         <div className="space-y-2">
-          <Label className="text-md" htmlFor={`state`}>
+          <Label className="text-md" htmlFor={`pincode`}>
             Pincode
           </Label>
           <InputBox
+            value={profileData?.address?.pincode || ""}
             onChange={(e) => {
-              handleChange(currentExp.id, "state", e.target.value);
+              handleChange("pincode", e.target.value);
             }}
             type="text"
-            id={`state`}
+            id={`pincode`}
             placeholder="pincode"
             className="w-full p-3 border border-zinc-300 rounded-lg"
           />
         </div>
-      </div>
+      </form>
     </div>
   );
 }

@@ -82,7 +82,7 @@ export default function Experience() {
   return (
     <div className="  mt-24  ">
       <div className="w-full max-w-2xl mx-auto pb-10 space-y-6   ">
-        <div className=" mb-10">
+        <div className=" mb-6">
           <h2 className="text-4xl font-bold font-montserrat">
             Add work experience
           </h2>
@@ -123,7 +123,7 @@ export default function Experience() {
         {experience === "Yes" && (
           <div className="mt-10  max-h-[800px] overflow-y-scroll ">
             {profileData?.experience?.map((currentExp, index) => (
-              <div
+              <form
                 key={currentExp.id}
                 className="space-y-6 mb-14  border p-4 rounded-lg border-zinc-200 pb-10"
               >
@@ -287,7 +287,6 @@ export default function Experience() {
                   </Label>
                 </div>
 
-                {/* Submit Button */}
                 <div className="flex justify-between font-poppins">
                   <Button
                     onClick={handleAddExp}
@@ -308,7 +307,7 @@ export default function Experience() {
                     </Button>
                   )}
                 </div>
-              </div>
+              </form>
             ))}
           </div>
         )}

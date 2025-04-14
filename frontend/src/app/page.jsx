@@ -1,4 +1,3 @@
-
 import { Button } from "../components/ui/button";
 
 import Hero from "../components/custom/Hero";
@@ -34,7 +33,6 @@ export default function LandingPage() {
     <div className="flex min-h-screen flex-col">
       {/* Navbar */}
 
-      <Header />
       <main className="flex-1 px-4 md:px-8">
         {/* Hero Section */}
         <Hero />
@@ -258,7 +256,9 @@ export default function LandingPage() {
 
           {/* Team / Social Section */}
           <div className="flex items-center justify-center md:justify-end w-full md:w-auto gap-2">
-            <span className="text-gray-300 font-medium font-montserrat">Genius behind this : </span>
+            <span className="text-gray-300 font-medium font-montserrat">
+              Genius behind this :{" "}
+            </span>
             <AnimatedTooltip items={people} />
           </div>
         </div>

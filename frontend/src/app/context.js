@@ -33,7 +33,7 @@ export function EmployeeProfileProvider({ children }) {
             currently_working: false,
           },
         ],
-        location: {
+        address: {
           country: "",
           street_address: "",
           city: "",

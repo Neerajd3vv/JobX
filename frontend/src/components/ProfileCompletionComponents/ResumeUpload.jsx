@@ -1,11 +1,12 @@
 "use client";
-import InputBox from "../custom/InputBox";
-import { Label } from "../ui/label";
+
 import { Button } from "../ui/button";
 import { Upload } from "lucide-react";
 import { useRef, useState } from "react";
 import { X } from "lucide-react";
 import { AlertCircle } from "lucide-react";
+import { useEmployeeContext } from "../../app/context";
+
 function ResumeUpload() {
   const acceptedFileTypes = ["pdf", "doc", "docx"];
   const maxFileSizeMB = 3 * 1024 * 1024;
@@ -13,6 +14,7 @@ function ResumeUpload() {
   const [error, setError] = useState(null);
   const [file, setFile] = useState(null);
   const inputRef = useRef(null);
+  const { profileData, setProfileData } = useEmployeeContext();
 
   const validateFile = (file) => {
     if (file.size > maxFileSizeMB) {
@@ -26,7 +28,11 @@ function ResumeUpload() {
       setError("Invalid file type. Please upload a PDF, DOC, or DOCX file.");
       return false;
     }
-    setFile(file);
+    setError(null);
+    setProfileData((prev) => {
+      return { ...prev, resume: { filename: file.name } };
+    });
+    return true;
   };
 
   const handleDragOver = (e) => {
@@ -67,12 +73,12 @@ function ResumeUpload() {
   return (
     <div className="mt-24 w-full max-w-2xl mx-auto ">
       <h2 className="text-4xl mb-6 font-bold">Upload your resume</h2>
-      {!file ? (
+      {!profileData?.resume?.filename ? (
         <div
           className={`
             relative w-full font-poppins h-80 rounded-xl transition-all duration-300 ease-in-out
             border-2 border-dashed flex flex-col items-center justify-center cursor-pointer
-            bg-gradient-to-b from-gray-50 to-gray-100 
+             
              ${
                isDragging
                  ? "border-blue-500 bg-blue-50 "
@@ -102,9 +108,11 @@ function ResumeUpload() {
 
           <div className="flex flex-col items-center gap-4 px-6 text-center">
             <div
-              className={`w-16 h-16 rounded-full flex items-center justify-center transition-all
-              isDragging ? "bg-blue-100 text-blue-600 " : "bg-gray-100 text-gray-500"
-              `}
+              className={`w-16 h-16 rounded-full flex items-center justify-center transition-all ${
+                isDragging
+                  ? "bg-blue-100 text-blue-600"
+                  : "bg-gray-100 text-gray-500"
+              }`}
             >
               <Upload
                 className={`${
@@ -139,10 +147,15 @@ function ResumeUpload() {
           </div>
         </div>
       ) : (
-        <div className="flex justify-between items-center gap-2"> 
-          <div>{file.name}</div>
-          <Button onClick={handleRemove} className="p-1" variant="outline" size="small">
-            <X size={16}  />
+        <div className="flex justify-between items-center gap-2">
+          <div>{profileData.resume.filename}</div>
+          <Button
+            onClick={handleRemove}
+            className="p-1"
+            variant="outline"
+            size="small"
+          >
+            <X size={16} />
           </Button>
         </div>
       )}

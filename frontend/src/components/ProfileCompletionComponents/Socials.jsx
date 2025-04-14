@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useEmployeeContext } from "../../app/context";
 import { Label } from "../ui/label";
 import Image from "next/image";
+
 import {
   Select,
   SelectContent,
@@ -32,18 +33,6 @@ function Socials() {
   ];
 
   const { profileData, setProfileData } = useEmployeeContext();
-  const [platform, setPlatform] = useState("");
-  const [link, setLink] = useState("");
-
-  const handlSave = (id, platform, link) => {
-    setProfileData((prev) => {
-      const newSocials = prev.socials.map((item) =>
-        item.id === id ? { ...item, platform, link } : item
-      );
-      const newProfileData = { ...prev, socials: newSocials };
-      return newProfileData;
-    });
-  };
 
   const handleSocilaRemove = (id) => {
     setProfileData((prev) => {
@@ -68,10 +57,19 @@ function Socials() {
     });
   };
 
+  const handleValueChange = (id, value, label) => {
+    setProfileData((prev) => {
+      const updatedSocialProfile = prev.socials.map((social) =>
+        social.id === id ? { ...social, [label]: value } : social
+      );
+      return { ...prev, socials: updatedSocialProfile };
+    });
+  };
+
   return (
     <div className="mt-24 w-full max-w-2xl  mx-auto">
-      <div className="mb-8">
-        <h2 className="text-4xl font-bold mb-10 font-montserrat">
+      <div className="pb-10">
+        <h2 className="text-4xl font-bold mb-6 font-montserrat">
           Add social profile
         </h2>
         <p className="font-poppins">
@@ -80,13 +78,7 @@ function Socials() {
       </div>
       <div className="space-y-4 font-poppins">
         {profileData?.socials.map((item) => (
-          <form
-            key={item.id}
-            onSubmit={(e) => {
-              e.preventDefault();
-              handlSave(item.id, item.platform, item.link);
-            }}
-          >
+          <form key={item.id}>
             <Card className="border border-gray-200 p-4">
               <CardContent className="p-0">
                 <div className=" flex-col sm:flex sm:flex-row space-y-3 sm:space-y-0 items-center gap-2">
@@ -97,14 +89,7 @@ function Socials() {
                     <div>
                       <Select
                         onValueChange={(value) => {
-                          setProfileData((prev) => ({
-                            ...prev,
-                            socials: prev.socials.map((social) =>
-                              social.id === item.id
-                                ? { ...social, platform: value }
-                                : social
-                            ),
-                          }));
+                          handleValueChange(item.id, value, "platform");
                         }}
                         value={item.platform}
                       >
@@ -135,14 +120,7 @@ function Socials() {
                     <div className="flex items-center gap-2">
                       <InputBox
                         onChange={(e) => {
-                          setProfileData((prev) => ({
-                            ...prev,
-                            socials: prev.socials.map((social) =>
-                              social.id === item.id
-                                ? { ...social, link: e.target.value }
-                                : social
-                            ),
-                          }));
+                          handleValueChange(item.id, e.target.value, "link");
                         }}
                         className="w-full p-3 border border-zinc-300 rounded-lg"
                         id={`link-${item.id}`}
