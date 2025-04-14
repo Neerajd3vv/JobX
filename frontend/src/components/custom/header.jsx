@@ -7,6 +7,9 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import SignIn from "../custom/SignIn";
+import SignUp from "../custom/SignUp";
+import { useRoleContext } from "../../app/context";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,9 +20,12 @@ import {
 } from "../ui/dropdown-menu";
 function Header() {
   const [scrolledEnough, setScrolledEnough] = useState(false);
-
+  const [isSignInClicked, setIsSignInClicked] = useState(false);
+  const [isSignUpClicked, setIsSignUpClicked] = useState(false);
   const [hamMenu, setHamMenu] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+
+  const { setRole } = useRoleContext();
 
   const router = useRouter();
   useEffect(() => {
@@ -33,6 +39,18 @@ function Header() {
     };
   }, []);
 
+  useEffect(() => {
+    if (isSignInClicked || hamMenu || isSignUpClicked) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isSignUpClicked, hamMenu, isSignInClicked]);
+
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
@@ -43,7 +61,7 @@ function Header() {
 
   return (
     <div>
-      <header className=" sticky top-0 z-50 px-4 md:px-8 pt-6 ">
+      <header className=" px-4 md:px-8 pt-6 ">
         <div
           className={`${
             scrolledEnough
@@ -51,39 +69,28 @@ function Header() {
               : "bg-transparent"
           } flex h-20 items-center justify-between px-3 sm:px-4 md:px-6 lg:px-10 rounded-lg border border-transparent`}
         >
-          {/* <div className="flex items-center gap-2 font-bold text-xl"> */}
-          <span className="font-montserrat font-bold text-2xl md:text-3xl lg:text-3xl transition-all cursor-pointer">
-            JobX
-          </span>
-          {/* </div> */}
+          <div className="flex items-center space-x-20 lg:space-x-28">
+            <h1 className="font-montserrat cursor-pointer font-bold text-2xl md:text-3xl lg:text-3xl transition-all">
+              <Link href="/">JobX</Link>
+            </h1>
 
-          <nav className="hidden md:flex items-center gap-4 lg:gap-6 font-poppins text-zinc-700">
-            <Link
-              href="#"
-              className="text-xs lg:text-sm font-medium hover:text-primary group relative whitespace-nowrap transition-all"
-            >
-              <span>Find Jobs</span>
-              <span className="absolute right-0 h-0.5 bg-blue-700 w-0 -bottom-1 group-hover:left-0 group-hover:w-full transform transition-all duration-300"></span>
-            </Link>
-            <Link
-              href="#"
-              className="text-xs lg:text-sm font-medium hover:text-primary group relative whitespace-nowrap transition-all"
-            >
-              <span>Browse Companies</span>
-              <span className="absolute right-0 h-0.5 bg-blue-700 w-0 -bottom-1 group-hover:left-0 group-hover:w-full transform transition-all duration-300"></span>
-            </Link>
-            <Link
-              href="#"
-              className="text-xs lg:text-sm font-medium hover:text-primary group relative whitespace-nowrap transition-all"
-            >
-              <span>For Employers</span>
-              <span className="absolute right-0 h-0.5 bg-blue-700 w-0 -bottom-1 group-hover:left-0 group-hover:w-full transform transition-all duration-300"></span>
-            </Link>
-            {/* <Link href="#" className="text-sm font-medium hover:text-primary">
-            Resources
-          </Link> */}
-          </nav>
-
+            <nav className="hidden md:flex items-center gap-4 lg:gap-6 font-poppins text-zinc-700">
+              <Link
+                href="#"
+                className="text-xs lg:text-sm font-medium hover:text-primary group relative whitespace-nowrap transition-all"
+              >
+                <span>Find Jobs</span>
+                <span className="absolute right-0 h-0.5 bg-blue-700 w-0 -bottom-1 group-hover:left-0 group-hover:w-full transform transition-all duration-300"></span>
+              </Link>
+              <Link
+                href="#"
+                className="text-xs lg:text-sm font-medium hover:text-primary group relative whitespace-nowrap transition-all"
+              >
+                <span>Browse Companies</span>
+                <span className="absolute right-0 h-0.5 bg-blue-700 w-0 -bottom-1 group-hover:left-0 group-hover:w-full transform transition-all duration-300"></span>
+              </Link>
+            </nav>
+          </div>
           <div className="md:hidden flex items-center  space-x-6 sm:space-x-12 transition-all">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -92,7 +99,7 @@ function Header() {
                   size="sm"
                   className="px-5 font-montserrat bg-blue-700 lg:px-8 py-4  border border-zinc-300 hover:bg-blue-700/90 hover:text-white hover:border-zinc-300 transition-all text-xs lg:text-sm"
                 >
-                  Login
+                  SignIn
                 </Button>
               </DropdownMenuTrigger>
 
@@ -100,13 +107,21 @@ function Header() {
                 <DropdownMenuLabel>Sign in as</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onClick={() => router.push("/signin?type=employer")}
+                  onClick={() => {
+                    setIsSignUpClicked(false);
+                    setIsSignInClicked(true);
+                    setRole("recruiter")
+                  }}
                   className="cursor-pointer"
                 >
-                  Employer
+                  Recruiter
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => router.push("/signin?type=candidate")}
+                  onClick={() => {
+                    setIsSignUpClicked(false);
+                    setIsSignInClicked(true);
+                    setRole("candidate")
+                  }}
                   className="cursor-pointer"
                 >
                   Candidate
@@ -114,15 +129,13 @@ function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button 
-            variant="outline"
-            onClick={() => {
-              setHamMenu(true);
-            }}
+            <Button
+              variant="outline"
+              onClick={() => {
+                setHamMenu(true);
+              }}
             >
-              <Menu
-                
-              />
+              <Menu />
             </Button>
 
             {/* <Image
@@ -138,17 +151,21 @@ function Header() {
           <div className="hidden md:flex items-center gap-4 font-poppins">
             <Button
               onClick={() => {
-                router.push("/signin?type=employer");
+                setIsSignUpClicked(false);
+                setIsSignInClicked(true);
+                setRole("recruiter")
               }}
               variant="outline"
               size="lg"
               className={`px-5 lg:px-8 border-1 border-zinc-300 hover:bg-[#2e1c2b] hover:text-white hover:border-zinc-300 transform transition-all duration-300 ease-in text-xs lg:text-sm`}
             >
-              For Employer
+              Recruiter
             </Button>
             <Button
               onClick={() => {
-                router.push("/signin?type=candidate");
+                setIsSignUpClicked(false);
+                setIsSignInClicked(true);
+                setRole("candidate")
               }}
               size="lg"
               className={` px-3 lg:px-5 bg-blue-700 text-xs lg:text-sm hover:bg-blue-700/90 transform transition-all duration-300 ease-in`}
@@ -210,25 +227,49 @@ function Header() {
               <div className="mt-auto flex flex-col gap-4 mb-8 font-poppins">
                 <Button
                   onClick={() => {
-                    router.push("/signin?type=employer");
+                    handleClose();
+                    setIsSignUpClicked(false);
+                    setIsSignInClicked(true);
+                    setRole("recruiter")
                   }}
                   variant="outline"
                   className="w-full py-6 border-zinc-300 hover:bg-[#2e1c2b] hover:text-white px-8 border-1 hover:border-zinc-300 transform transition-all duration-300 "
                 >
-                  For Employers
+                  Recruiter SignIn
                 </Button>
                 <Button
                   onClick={() => {
-                    router.push("/signin?type=candidate");
+                    handleClose();
+                    setIsSignUpClicked(false);
+                    setIsSignInClicked(true);
+                    setRole("candidate")
                   }}
                   className="w-full py-6 bg-blue-700 hover:bg-blue-700/90 transform transition-all duration-300 ease-in"
                 >
-                  For Employees
+                  Candidate SignIn
                 </Button>
               </div>
             </div>
           </div>
         </>
+      )}
+      {(isSignInClicked || isSignUpClicked) && (
+        <div className="fixed  bg-gray-700/50 inset-0 z-50">
+          <div className="z-50 px-3   ">
+            {isSignInClicked && (
+              <SignIn
+                setIsSignInClicked={setIsSignInClicked}
+                setIsSignUpClicked={setIsSignUpClicked}
+              />
+            )}
+            {isSignUpClicked && (
+              <SignUp
+                setIsSignUpClicked={setIsSignUpClicked}
+                setIsSignInClicked={setIsSignInClicked}
+              />
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

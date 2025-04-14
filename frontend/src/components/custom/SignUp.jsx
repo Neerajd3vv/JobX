@@ -6,7 +6,10 @@ import { Loader2 } from "lucide-react";
 import InputBox from "../../components/custom/InputBox";
 import googleLogo from "../../../public/images/Google__G__logo.svg.webp";
 import Image from "next/image";
+import Link from "next/link";
+import { X } from "lucide-react";
 import { toast } from "sonner";
+import { useRoleContext } from "../../app/context";
 import {
   Card,
   CardContent,
@@ -19,12 +22,14 @@ import { Label } from "../../components/ui/label";
 import { Separator } from "../../components/ui/separator";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-export default function SignUp() {
+export default function SignUp({ setIsSignUpClicked, setIsSignInClicked }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { role } = useRoleContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,13 +60,15 @@ export default function SignUp() {
             name: name,
             email: email,
             password: password,
+            role: role,
           }),
         }
       );
       const data = await response.json();
       if (response.ok) {
         toast("Sign In to continue");
-        router.push("/signin");
+        setIsSignUpClicked(false);
+        setIsSignInClicked(true);
       } else if (data.message === "Validation Failed!") {
         toast("Pls give all info. pass min - 6 & name min - 2");
       } else if (data.message === "User already exists") {
@@ -78,9 +85,12 @@ export default function SignUp() {
     }
   };
 
+  console.log("role from signup", role);
   const handleGoogleSignUp = async () => {
     setIsLoading(true);
     try {
+      console.log("singup se role", role);
+      localStorage.setItem("userRole", role);
       await signIn("google", {
         callbackUrl: "/profileCompletion/basicinfo",
       });
@@ -94,14 +104,22 @@ export default function SignUp() {
 
   return (
     <div className=" h-screen flex flex-col gap-10 items-center justify-center">
-      <h1 className="font-montserrat text-5xl text-center lg:text-4xl transition-all font-bold">
+      {/* <h1 className="font-montserrat text-5xl text-center lg:text-4xl transition-all font-bold">
         Jobx
-      </h1>
+      </h1> */}
 
       <Card className="w-full max-w-lg mx-auto border-1 border-zinc-300 shadow-xl">
         <CardHeader>
-          <CardTitle className="text-3xl font-montserrat font-bold ">
-            Create an Account
+          <CardTitle className="text-2xl sm:text-3xl flex items-center justify-between font-montserrat font-bold  ">
+            <h2>Create an Account</h2>
+            <Button
+              onClick={() => {
+                setIsSignUpClicked(false);
+              }}
+              variant="ghost"
+            >
+              <X />
+            </Button>
           </CardTitle>
           <CardDescription className="font-poppins text-md text-zinc-700 ">
             Enter your details below to sign up
@@ -111,7 +129,7 @@ export default function SignUp() {
         <CardContent className="space-y-4 font-poppins">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-md">
+              <Label htmlFor="name" className="text-sm sm:text-md">
                 Name
               </Label>
               <InputBox
@@ -126,7 +144,7 @@ export default function SignUp() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-md">
+              <Label htmlFor="email" className="text-sm sm:text-md">
                 Email
               </Label>
               <InputBox
@@ -141,7 +159,7 @@ export default function SignUp() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-md">
+              <Label htmlFor="password" className="text-sm sm:text-md">
                 Password
               </Label>
               <InputBox
@@ -156,7 +174,7 @@ export default function SignUp() {
 
             <Button
               type="submit"
-              className="w-full font-poppins bg-blue-700 hover:bg-blue-700/90 transform transition-all duration-300 ease-in text-lg rounded-lg py-7"
+              className="w-full font-montserrat bg-blue-700 hover:bg-blue-700/90 transform transition-all duration-300 ease-in text-md sm:text-lg rounded-lg py-7"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -173,7 +191,7 @@ export default function SignUp() {
             <div className="absolute inset-0 flex items-center">
               <Separator className="w-full" />
             </div>
-            <div className="relative flex justify-center text-sm uppercase">
+            <div className="relative flex justify-center text-xs sm:text-sm uppercase">
               <span className="bg-background px-2 text-zinc-600">
                 Or continue with
               </span>
@@ -184,26 +202,30 @@ export default function SignUp() {
             onClick={handleGoogleSignUp}
             variant="outline"
             disabled={isLoading}
-            className="w-full py-7 font-poppins text-lg border border-zinc-300 rounded-lg"
+            className="w-full py-7 font-montserrat text-lg border border-zinc-300 rounded-lg"
           >
             <Image
               src={googleLogo}
               alt="Google Logo"
-              className="w-8 h-8 mr-2"
+              className=" w-6 h-6 sm:w-8 sm:h-8 mr-2"
             />
             Sign up with Google
           </Button>
         </CardContent>
 
         <CardFooter className="flex font-poppins flex-col items-center justify-center space-y-2">
-          <div className="text-md text-muted-foreground">
+          <div className="text-sm sm:text-md text-muted-foreground">
             Already have an account?{" "}
-            <a
-              href="/signin"
+            <Link
+              href="#"
+              onClick={() => {
+                setIsSignUpClicked(false);
+                setIsSignInClicked(true);
+              }}
               className="text-primary underline-offset-4 hover:underline"
             >
               Sign In
-            </a>
+            </Link>
           </div>
         </CardFooter>
       </Card>

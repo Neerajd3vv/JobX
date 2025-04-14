@@ -18,7 +18,7 @@ model User {
   name String
   email String @unique
   password String?
-  role String @default("employee")
+  role String @default("candidate")
   profileCompleted Boolean @default(false)
   provider String @default("credentials")
   createdAt DateTime @default(now())

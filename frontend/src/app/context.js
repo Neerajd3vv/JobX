@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 // Context
 const EmployeeProfileContext = createContext();
+const UserRoleContext = createContext();
 
 // context provider wraps every component with global context
 export function EmployeeProfileProvider({ children }) {
@@ -67,5 +68,16 @@ export function EmployeeProfileProvider({ children }) {
   );
 }
 
+export function UserRoleProvider({ children }) {
+  // Changed from UserRoleProfider
+  const [role, setRole] = useState("candidate");
+  return (
+    <UserRoleContext.Provider value={{ role, setRole }}>
+      {children}
+    </UserRoleContext.Provider>
+  );
+}
+
 // helper function / hook
 export const useEmployeeContext = () => useContext(EmployeeProfileContext);
+export const useRoleContext = () => useContext(UserRoleContext);

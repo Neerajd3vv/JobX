@@ -30,8 +30,8 @@ router.post("/signup/:provider", async (req, res) => {
     });
   }
 
-  const { name, email, password } = req.body;
-
+  const { name, email, password, role } = req.body;
+  console.log("whole signup data", req.body);
   try {
     // checks if user already exists
     if (provider === "credentials") {
@@ -53,6 +53,7 @@ router.post("/signup/:provider", async (req, res) => {
           email,
           password: hashedPassword,
           provider,
+          role,
         },
       });
       return res.status(201).json({ message: "User created successfully" });
@@ -66,13 +67,13 @@ router.post("/signup/:provider", async (req, res) => {
       if (userExists) {
         return res.status(400).json({ message: "User already exists" });
       }
-      // need to hash the password here cant store password in plain text
       await prisma.user.create({
         data: {
           name,
           email,
           password,
           provider,
+          role,
         },
       });
       return res.status(201).json({ message: "User created successfully" });
