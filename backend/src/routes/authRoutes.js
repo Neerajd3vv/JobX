@@ -28,11 +28,10 @@ router.post("/signup/:provider", async (req, res) => {
     return res.status(400).json({
       message: "Validation Failed!",
       error: validatedData.error.issues[0].message,
-
-    }); 
+    });
   }
-  
-  const { name, email, password , role} = req.body;
+
+  const { name, email, password, role } = req.body;
   console.log("whole signup data", req.body);
   try {
     // checks if user already exists
@@ -40,11 +39,12 @@ router.post("/signup/:provider", async (req, res) => {
       const userExists = await prisma.user.findUnique({
         where: {
           email,
-          provider,
         },
       });
       if (userExists) {
-        return res.status(400).json({ message: "User already exists" });
+        return res
+          .status(400)
+          .json({ existingUser: userExists, message: "User already exists" });
       }
 
       // need to hash the password here cant store password in plain text
@@ -63,11 +63,12 @@ router.post("/signup/:provider", async (req, res) => {
       const userExists = await prisma.user.findUnique({
         where: {
           email,
-          provider,
         },
       });
       if (userExists) {
-        return res.status(400).json({ message: "User already exists" });
+        return res
+          .status(400)
+          .json({ existingUser: userExists, message: "User already exists" });
       }
       await prisma.user.create({
         data: {
@@ -106,9 +107,9 @@ router.post("/signin", async (req, res) => {
     const foundUser = await prisma.user.findUnique({
       where: {
         email,
-        provider: "credentials",
       },
     });
+    console.log("foundeUser", foundUser)
     if (!foundUser) {
       return res
         .status(404)

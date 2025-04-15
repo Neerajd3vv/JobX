@@ -58,9 +58,9 @@ export default function SignUp({ setIsSignUpClicked, setIsSignInClicked }) {
             name: name,
             email: email,
             password: password,
-            role
+            role,
           }),
-          credentials: "include"
+          credentials: "include",
         }
       );
       const data = await response.json();
@@ -71,7 +71,11 @@ export default function SignUp({ setIsSignUpClicked, setIsSignInClicked }) {
       } else if (data.message === "Validation Failed!") {
         toast("Pls give all info. pass min - 6 & name min - 2");
       } else if (data.message === "User already exists") {
-        toast("User already exists");
+        setIsSignUpClicked(false);
+        setIsSignInClicked(false);
+        toast.error(
+          `Already registered as ${data.existingUser.role}. Please sign in.`
+        );
       }
     } catch (error) {
       console.log("error", error);
@@ -87,11 +91,24 @@ export default function SignUp({ setIsSignUpClicked, setIsSignInClicked }) {
   const handleGoogleSignUp = async () => {
     setIsLoading(true);
     try {
-      const providerId = role === "recruiter" ? "google-recruiter" : "google-candidate"
-      await signIn(providerId, {
-        callbackUrl: "/profileCompletion/basicinfo",
-      });
+      const providerId =
+        role === "recruiter" ? "google-recruiter" : "google-candidate";
+      await signIn(providerId);
     } catch (error) {
+      if (
+        error.message ===
+        `User is registered as ${
+          role === "candidate" ? "recruiter" : "candidate"
+        }`
+      ) {
+        setIsSignInClicked(false);
+        setIsSignUpClicked(false);
+        toast(
+          `Please register as ${
+            role === "candidate" ? "recruiter" : "candidate"
+          }`
+        );
+      }
       toast("Server Error");
       console.log("error", error);
     } finally {

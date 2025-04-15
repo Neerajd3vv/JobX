@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRoleContext } from "../../app/context";
+import { toast } from "sonner";
+
 import {
   Card,
   CardContent,
@@ -22,7 +24,6 @@ import {
 } from "../../components/ui/card";
 import { Label } from "../../components/ui/label";
 import { Separator } from "../../components/ui/separator";
-import { toast } from "sonner";
 
 export default function SignIn({ setIsSignInClicked, setIsSignUpClicked }) {
   const { data: session, status } = useSession();
@@ -44,9 +45,10 @@ export default function SignIn({ setIsSignInClicked, setIsSignUpClicked }) {
     setIsLoading(true);
     try {
       const result = await signIn("credentials", {
+        redirect: false,
         email,
         password,
-        redirect: false,
+        role,
       });
 
       if (result.ok) {
@@ -56,6 +58,17 @@ export default function SignIn({ setIsSignInClicked, setIsSignUpClicked }) {
           toast("Password is incorrect");
         } else if (result.error === "User not found with such email") {
           toast("No user with such email");
+        } else if (
+          (result.error = `Registered as ${
+            role === "candidate" ? "recruiter" : "candidate"
+          }`)
+        ) {
+          setIsSignInClicked(false);
+          toast.error(
+            `Please SignIn as ${
+              role === "candidate" ? "recruiter" : "candidate"
+            }`
+          );
         }
       }
     } catch (error) {
@@ -68,7 +81,8 @@ export default function SignIn({ setIsSignInClicked, setIsSignUpClicked }) {
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     try {
-      const providerId = role === "recruiter" ? "google-recruiter" : "google-candidate"
+      const providerId =
+        role === "recruiter" ? "google-recruiter" : "google-candidate";
       await signIn(providerId, {
         callbackUrl: "/profileCompletion/basicinfo",
       });
