@@ -44,7 +44,6 @@ export default function SignIn() {
       });
 
       if (result.ok) {
-        console.log("login in successfull");
         // router.push("/profile")
       } else if (result?.error) {
         if (result.error === "Password is incorrect") {

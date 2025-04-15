@@ -3,7 +3,6 @@
 import * as React from "react"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
-import { useEmployeeContext } from "../../app/context"
 import { cn } from "../../lib/utils"
 import { Button } from "../ui/button"
 import { Calendar } from "../ui/calendar"
@@ -14,11 +13,8 @@ import {
 } from "../ui/popover"
 
 export function DatePickerDemo() {
-  const [date, setDate] = React.useState()
-const {profileData, setProfileData } = useEmployeeContext()
   return (
     <Popover>
-        {console.log("date" , date)}
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}

@@ -47,8 +47,6 @@ export default function SignUp({ setIsSignUpClicked, setIsSignInClicked }) {
     setIsLoading(true);
 
     try {
-      console.log("Backend URL:", process.env.NEXT_PUBLIC_BACKEND_URL);
-
       const response = await fetch(
         `http://localhost:8383/v1/auth/signup/credentials`,
         {
@@ -60,8 +58,9 @@ export default function SignUp({ setIsSignUpClicked, setIsSignInClicked }) {
             name: name,
             email: email,
             password: password,
-            role: role,
+            role
           }),
+          credentials: "include"
         }
       );
       const data = await response.json();
@@ -85,13 +84,11 @@ export default function SignUp({ setIsSignUpClicked, setIsSignInClicked }) {
     }
   };
 
-  console.log("role from signup", role);
   const handleGoogleSignUp = async () => {
     setIsLoading(true);
     try {
-      console.log("singup se role", role);
-      localStorage.setItem("userRole", role);
-      await signIn("google", {
+      const providerId = role === "recruiter" ? "google-recruiter" : "google-candidate"
+      await signIn(providerId, {
         callbackUrl: "/profileCompletion/basicinfo",
       });
     } catch (error) {

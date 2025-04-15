@@ -22,7 +22,6 @@ function ResumeUpload() {
       return false;
     }
     const fileType = file.name.split(".").pop();
-    console.log("fileType", fileType);
     const isValidFileType = acceptedFileTypes.includes(fileType.toLowerCase());
     if (!isValidFileType) {
       setError("Invalid file type. Please upload a PDF, DOC, or DOCX file.");

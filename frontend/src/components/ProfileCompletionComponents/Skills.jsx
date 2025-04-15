@@ -29,10 +29,8 @@ function Skills() {
   };
 
   const handleRemoveSkill = (id) => {
-    console.log("id", id);
     setProfileData((prev) => {
       const newSkillsArray = prev.skills.filter((skill) => skill.id !== id);
-      console.log("newSkillsArray", newSkillsArray);
       const updatedProfileData = { ...prev, skills: newSkillsArray };
       return updatedProfileData;
     });

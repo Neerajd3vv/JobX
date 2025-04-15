@@ -42,7 +42,6 @@ export default function SignUp() {
     setIsLoading(true);
 
     try {
-      console.log("Backend URL:", process.env.NEXT_PUBLIC_BACKEND_URL);
 
       const response = await fetch(
         `http://localhost:8383/v1/auth/signup/credentials`,

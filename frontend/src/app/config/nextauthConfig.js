@@ -14,7 +14,6 @@ export const authConfig = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log("credentials", credentials);
         const { email, password } = credentials;
         const result = await fetch(`http://localhost:8383/v1/auth/signin`, {
           method: "POST",
@@ -26,9 +25,7 @@ export const authConfig = {
             password,
           }),
         });
-        console.log("result", result);
         const data = await result.json();
-        console.log("data", data);
         if (!result.ok) {
           throw new Error(data.message);
         }
@@ -42,8 +39,30 @@ export const authConfig = {
       },
     }),
     GoogleProvider({
+      id: "google-recruiter",
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          role: "recruiter",
+        };
+      },
+    }),
+    GoogleProvider({
+      id: "google-candidate",
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,   
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          role: "candidate",
+        };
+      },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
@@ -51,9 +70,11 @@ export const authConfig = {
   callbacks: {
     async signIn({ account, profile }) {
       console.log("google auth started");
-      if (account.provider === "google") {
+      if (account.provider.startsWith("google-")) {
+        const role =
+          account.provider === "google-recruiter" ? "recruiter" : "candidate";
+
         const { email, name } = profile;
-        console.log("profile", profile);
 
         await fetch(`http://localhost:8383/v1/auth/signup/google`, {
           method: "POST",
@@ -64,6 +85,7 @@ export const authConfig = {
             name,
             email,
             password: null,
+            role,
           }),
         });
         return true;

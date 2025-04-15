@@ -2,10 +2,10 @@
 import InputBox from "../../components/custom/InputBox";
 import { Label } from "../../components/ui/label";
 import { useEmployeeContext } from "../../app/context";
-import { useState } from "react";
+import { useSession } from "next-auth/react";
 export default function BasicInfo() {
   const { profileData, setProfileData } = useEmployeeContext();
-
+  const { data: session } = useSession();
   const inputChange = (value, label) => {
     setProfileData((prev) => {
       const newBasicInfo = { ...prev.basicinfo, [label]: value };
@@ -20,7 +20,7 @@ export default function BasicInfo() {
         <div className=" mb-6">
           <h2 className="text-4xl font-bold font-montserrat">Basic Info</h2>
         </div>
-
+        {JSON.stringify(session?.user)}
         <form className="space-y-6 font-poppins">
           <div className="space-y-2">
             <Label htmlFor="name" className="text-md">

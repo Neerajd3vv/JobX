@@ -24,13 +24,15 @@ router.post("/signup/:provider", async (req, res) => {
       "Zod validation signup error : ",
       validatedData.error.issues[0]
     );
+
     return res.status(400).json({
       message: "Validation Failed!",
       error: validatedData.error.issues[0].message,
-    });
-  }
 
-  const { name, email, password, role } = req.body;
+    }); 
+  }
+  
+  const { name, email, password , role} = req.body;
   console.log("whole signup data", req.body);
   try {
     // checks if user already exists

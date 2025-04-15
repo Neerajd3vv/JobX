@@ -11,6 +11,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useRoleContext } from "../../app/context";
 import {
   Card,
   CardContent,
@@ -29,6 +30,9 @@ export default function SignIn({ setIsSignInClicked, setIsSignUpClicked }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  const { role } = useRoleContext();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -46,7 +50,6 @@ export default function SignIn({ setIsSignInClicked, setIsSignUpClicked }) {
       });
 
       if (result.ok) {
-        console.log("login in successfull");
         // router.push("/profile")
       } else if (result?.error) {
         if (result.error === "Password is incorrect") {
@@ -65,12 +68,13 @@ export default function SignIn({ setIsSignInClicked, setIsSignUpClicked }) {
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     try {
-      await signIn("google", {
-        redirect: false,
+      const providerId = role === "recruiter" ? "google-recruiter" : "google-candidate"
+      await signIn(providerId, {
+        callbackUrl: "/profileCompletion/basicinfo",
       });
     } catch (error) {
       toast("Server Error");
-      toast("Something went wrong");
+      console.log("error", error);
     } finally {
       setIsLoading(false);
     }

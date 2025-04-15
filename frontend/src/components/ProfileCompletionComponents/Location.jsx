@@ -112,6 +112,7 @@ function Location() {
               handleChange("pincode", e.target.value);
             }}
             type="text"
+          
             id={`pincode`}
             placeholder="pincode"
             className="w-full p-3 border border-zinc-300 rounded-lg"

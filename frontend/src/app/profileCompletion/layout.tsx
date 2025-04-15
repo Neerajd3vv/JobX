@@ -16,7 +16,6 @@ import { useParams } from "next/navigation";
 export default Layout;
 
 function NavigationButton({ currentStep }) {
-  console.log("currentStep", currentStep)
   const router = useRouter();
   const forms = [
     "basicinfo",

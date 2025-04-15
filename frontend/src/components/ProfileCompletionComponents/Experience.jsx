@@ -7,6 +7,7 @@ import { useState } from "react";
 import JobType from "../custom/JobType";
 import { DatePickerDemo } from "../custom/DatePicker";
 import { useEmployeeContext } from "../../app/context";
+
 export default function Experience() {
   const [experience, setExperience] = useState();
   const [currentlyWorking, setCurrentlyWorking] = useState(false);
@@ -15,7 +16,6 @@ export default function Experience() {
   const { profileData, setProfileData } = useEmployeeContext();
 
   const generateId = () => Date.now().toString(36) + Math.random().toString(36);
-  console.log("profileDataContext", profileData);
 
   // const [experiencelist, setExperienceList] = useState([
   //   {
@@ -56,7 +56,6 @@ export default function Experience() {
   };
 
   const handleRemoveExp = (uniqueId) => {
-    console.log("uniqueId", uniqueId);
 
     setProfileData((prev) => {
       const newExperience = prev.experience.filter(
